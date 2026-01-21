@@ -1,0 +1,4 @@
+node_modules/
+data/signalisation_stationnement.geojson.json
+backend/clean_data
+backend/target
