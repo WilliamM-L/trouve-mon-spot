@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 
 INPUT_FILE = Path(__file__).parent / "signalisation_stationnement.geojson.json"
-OUTPUT_DIR = Path("/home/inscius/code/street_parking/backend/clean_data")
+OUTPUT_DIR = Path("/home/inscius/code/trouve-mon-spot/backend/clean_data")
 OUTPUT_FILE = OUTPUT_DIR / "signalisation_stationnement_cleaned.geojson.json"
 
 # Properties to keep
@@ -24,30 +24,34 @@ KEEP_PROPERTIES = [
     "NOM_ARROND",
 ]
 
-# Text patterns that indicate entries to remove
+# Text patterns that indicate entries to remove (include the \P or \A prefix)
 REMOVE_PATTERNS = [
     "PANONCEAU EXCEPTE PERIODE INTERDITE",
     "PANONCEAU ZONE DE REMORQUAGE",
     "PANONCEAU DEBAR. SEULEMENT",
-    "\P LIVRAISON SEULEMENT EN TOUT TEMPS",
-    "\P RESERVE TAXIS",
-    "\P EXCEPTE DEBARCADERE AUTOBUS TOURISTIQUE",
-    "\P RESERVE AUTOBUS TOURISTIQUES",
-    "P 5 MIN.",
-    "\P RESERVE DEBARCADERE HANDICAPES EN TOUT TEMPS",
+    "\\P LIVRAISON SEULEMENT EN TOUT TEMPS",
+    "\\P RESERVE TAXIS",
+    "\\P EXCEPTE DEBARCADERE AUTOBUS TOURISTIQUE",
+    "\\P RESERVE AUTOBUS TOURISTIQUES",
+    "\\P 5 MIN.",
+    "\\P RESERVE DEBARCADERE HANDICAPES EN TOUT TEMPS",
+    "\\A EXCEPTÉ CORPS CONSULAIRES ET DIPLOMATIQUES",
+    "\\A EN TOUT TEMPS",
+    "\\P EN TOUT TEMPS",
+    "EN TOUT TEMPS",  # Catch-all for any variant (S3R, etc.)
 ]
 
 
 def should_remove(feature: dict) -> bool:
-    """Check if feature should be removed based on its properties."""
+    """Check if feature should be removed based on DESCRIPTION_RPA."""
     props = feature.get("properties", {})
+    description_rpa = props.get("DESCRIPTION_RPA", "")
     
-    # Check all property values for removal patterns
-    for value in props.values():
-        if isinstance(value, str):
-            for pattern in REMOVE_PATTERNS:
-                if pattern in value:
-                    return True
+    # Check DESCRIPTION_RPA for removal patterns
+    if isinstance(description_rpa, str):
+        for pattern in REMOVE_PATTERNS:
+            if description_rpa.__contains__(pattern):
+                return True
     return False
 
 

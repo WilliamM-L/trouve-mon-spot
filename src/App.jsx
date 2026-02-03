@@ -35,7 +35,7 @@ export default function App() {
         <div className="app">
             {/* Header */}
             <header className="header">
-                <h1>🅿 Street Parking</h1>
+                <h1>🚗💨 Trouve Mon Spot</h1>
                 <span className="badge">{filteredData.length} signs nearby</span>
             </header>
 

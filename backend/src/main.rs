@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tower_http::cors::{Any, CorsLayer};
 
-const GEOJSON_PATH: &str = "/home/inscius/code/street_parking/backend/clean_data/signalisation_stationnement_cleaned.geojson.json";
+const GEOJSON_PATH: &str = "/home/inscius/code/trouve-mon-spot/backend/clean_data/signalisation_stationnement_cleaned.geojson.json";
 
 // GeoJSON structures for parsing
 #[derive(Debug, Deserialize)]
