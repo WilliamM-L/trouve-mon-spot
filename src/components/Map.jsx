@@ -44,12 +44,15 @@ export default function Map({ center, radius, parkingData }) {
         <MapContainer
             center={[center.lat, center.lng]}
             zoom={16}
+            maxZoom={21}
             className="map-container"
             zoomControl={false}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                maxNativeZoom={18}
+                maxZoom={21}
             />
 
             <MapUpdater center={center} />

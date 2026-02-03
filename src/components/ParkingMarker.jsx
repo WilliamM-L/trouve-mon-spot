@@ -46,6 +46,19 @@ const paidParkingIcon = new L.Icon({
   popupAnchor: [0, -14]
 });
 
+// Time-limited parking icon (grey with exclamation mark)
+const timeLimitedIcon = new L.Icon({
+  iconUrl: 'data:image/svg+xml,' + encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28">
+      <circle cx="12" cy="12" r="11" fill="#6b7280" stroke="#fff" stroke-width="2"/>
+      <text x="12" y="17" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial">!</text>
+    </svg>
+  `),
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+  popupAnchor: [0, -14]
+});
+
 // Function to determine the appropriate icon based on feature properties
 function getMarkerIcon(properties) {
   const description = properties.DESCRIPTION_RPA || '';
@@ -59,6 +72,11 @@ function getMarkerIcon(properties) {
   // Check for paid parking (STAT-$ category or PARCOMETRE)
   if (category.startsWith('STAT-$') || description === 'PARCOMETRE') {
     return paidParkingIcon;
+  }
+
+  // Check for time-limited parking (contains "min" case insensitive)
+  if (description.toLowerCase().includes('min')) {
+    return timeLimitedIcon;
   }
 
   // Default parking icon
